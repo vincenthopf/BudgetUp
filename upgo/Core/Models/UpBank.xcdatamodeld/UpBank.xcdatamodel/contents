@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="22522" systemVersion="23E214" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithSwiftData="YES" userDefinedModelVersionIdentifier="">
+    <entity name="CDAccount" representedClassName="CDAccount" syncable="YES" codeGenerationType="class">
+        <attribute name="accountType" attributeType="String"/>
+        <attribute name="balanceCurrencyCode" attributeType="String"/>
+        <attribute name="balanceValue" attributeType="String"/>
+        <attribute name="balanceValueInBaseUnits" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="createdAt" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="displayName" attributeType="String"/>
+        <attribute name="id" attributeType="String"/>
+        <relationship name="transactions" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CDTransaction" inverseName="account" inverseEntity="CDTransaction"/>
+        <relationship name="transferTransactions" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CDTransaction" inverseName="transferAccount" inverseEntity="CDTransaction"/>
+    </entity>
+    <entity name="CDCategory" representedClassName="CDCategory" syncable="YES" codeGenerationType="class">
+        <attribute name="id" attributeType="String"/>
+        <attribute name="name" attributeType="String"/>
+        <relationship name="budgets" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CDBudget" inverseName="categories" inverseEntity="CDBudget"/>
+        <relationship name="children" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CDCategory" inverseName="parent" inverseEntity="CDCategory"/>
+        <relationship name="parent" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDCategory" inverseName="children" inverseEntity="CDCategory"/>
+        <relationship name="parentTransactions" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CDTransaction" inverseName="parentCategory" inverseEntity="CDTransaction"/>
+        <relationship name="transactions" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CDTransaction" inverseName="category" inverseEntity="CDTransaction"/>
+    </entity>
+    <entity name="CDTag" representedClassName="CDTag" syncable="YES" codeGenerationType="class">
+        <attribute name="id" attributeType="String"/>
+        <relationship name="budgets" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CDBudget" inverseName="tags" inverseEntity="CDBudget"/>
+        <relationship name="transactions" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CDTransaction" inverseName="tags" inverseEntity="CDTransaction"/>
+    </entity>
+    <entity name="CDTransaction" representedClassName="CDTransaction" syncable="YES" codeGenerationType="class">
+        <attribute name="amountCurrencyCode" attributeType="String"/>
+        <attribute name="amountValue" attributeType="String"/>
+        <attribute name="amountValueInBaseUnits" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="createdAt" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="isCategorizable" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="message" optional="YES" attributeType="String"/>
+        <attribute name="rawText" optional="YES" attributeType="String"/>
+        <attribute name="settledAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="status" attributeType="String"/>
+        <attribute name="transactionDescription" attributeType="String"/>
+        <attribute name="transactionId" attributeType="String"/>
+        <relationship name="account" maxCount="1" deletionRule="Nullify" destinationEntity="CDAccount" inverseName="transactions" inverseEntity="CDAccount"/>
+        <relationship name="category" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDCategory" inverseName="transactions" inverseEntity="CDCategory"/>
+        <relationship name="parentCategory" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDCategory" inverseName="parentTransactions" inverseEntity="CDCategory"/>
+        <relationship name="tags" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CDTag" inverseName="transactions" inverseEntity="CDTag"/>
+        <relationship name="transferAccount" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDAccount" inverseName="transferTransactions" inverseEntity="CDAccount"/>
+    </entity>
+    <entity name="CDBudget" representedClassName="CDBudget" syncable="YES" codeGenerationType="class">
+        <attribute name="budgetId" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="createdAt" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="endDate" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="name" attributeType="String"/>
+        <attribute name="startDate" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="targetAmountValue" attributeType="String"/>
+        <attribute name="targetAmountValueInBaseUnits" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="categories" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CDCategory" inverseName="budgets" inverseEntity="CDCategory"/>
+        <relationship name="tags" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CDTag" inverseName="budgets" inverseEntity="CDTag"/>
+    </entity>
+</model> 
